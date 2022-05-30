@@ -1,0 +1,15 @@
+version: "3"
+services:
+  db:
+    image: mysql:8.0.25
+    platform: linux/amd64 # amd64 (m1 mac)
+    container_name: spring-db-ex-mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "manager"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - /Users/npee/repo/db/spring-db-ex:/var/lib/mysql
