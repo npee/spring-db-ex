@@ -5,18 +5,22 @@ import io.npee.itemservice.repository.ItemRepository;
 import io.npee.itemservice.repository.ItemSearchCond;
 import io.npee.itemservice.repository.ItemUpdateDto;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.sql.DataSource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.util.StringUtils;
 
 /**
  * JdbcTemplate
  */
+@Slf4j
 public class JdbcTemplateItemRepositoryV1 implements ItemRepository {
 
     private final JdbcTemplate template;
@@ -63,7 +67,31 @@ public class JdbcTemplateItemRepositoryV1 implements ItemRepository {
 
     @Override
     public List<Item> findAll(ItemSearchCond cond) {
-        return null;
+        String itemName = cond.getItemName();
+        Integer maxPrice = cond.getMaxPrice();
+
+        String sql = "select id, item_name, price, quantity from item";
+
+        if (StringUtils.hasText(itemName) || maxPrice != null) {
+            sql += " where";
+        }
+
+        boolean andFlag = false;
+        List<Object> param = new ArrayList<>();
+        if (StringUtils.hasText(itemName)) {
+            sql += " item_name like concat('%',?,'%')";
+            param.add(itemName);
+            andFlag = true;
+        }
+        if (maxPrice != null) {
+            if (andFlag) {
+                sql += " and";
+            }
+            sql += " price <= ?";
+            param.add(maxPrice);
+        }
+        log.info("sql={}", sql);
+        return template.query(sql, itemRowMapper(), param.toArray());
     }
 
     private RowMapper<Item> itemRowMapper() {
