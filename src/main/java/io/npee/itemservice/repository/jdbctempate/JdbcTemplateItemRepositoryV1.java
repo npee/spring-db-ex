@@ -38,7 +38,7 @@ public class JdbcTemplateItemRepositoryV1 implements ItemRepository {
             PreparedStatement pstmt = conn.prepareStatement(sql, new String[]{"id"});
             pstmt.setString(1, item.getItemName());
             pstmt.setInt(2, item.getPrice());
-            pstmt.setInt(1, item.getQuantity());
+            pstmt.setInt(3, item.getQuantity());
             return pstmt;
         }, keyHolder);
 
