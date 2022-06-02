@@ -2,6 +2,7 @@ package io.npee.itemservice;
 
 import io.npee.itemservice.config.JdbcTemplateV1Config;
 import io.npee.itemservice.config.JdbcTemplateV2Config;
+import io.npee.itemservice.config.JdbcTemplateV3Config;
 import io.npee.itemservice.repository.ItemRepository;
 import io.npee.itemservice.config.MemoryConfig;
 import org.springframework.boot.SpringApplication;
@@ -13,7 +14,8 @@ import org.springframework.context.annotation.Profile;
 
 //@Import(MemoryConfig.class)
 //@Import(JdbcTemplateV1Config.class)
-@Import(JdbcTemplateV2Config.class)
+//@Import(JdbcTemplateV2Config.class)
+@Import(JdbcTemplateV3Config.class)
 @SpringBootApplication(scanBasePackages = "io.npee.itemservice.web")
 public class ItemServiceApplication {
 
