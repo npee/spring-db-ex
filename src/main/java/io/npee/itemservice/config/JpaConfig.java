@@ -1,7 +1,7 @@
 package io.npee.itemservice.config;
 
 import io.npee.itemservice.repository.ItemRepository;
-import io.npee.itemservice.repository.jpa.JpaItemRepository;
+import io.npee.itemservice.repository.jpa.JpaItemRepositoryV1;
 import io.npee.itemservice.service.ItemService;
 import io.npee.itemservice.service.ItemServiceV1;
 import javax.persistence.EntityManager;
@@ -22,7 +22,7 @@ public class JpaConfig {
 
     @Bean
     public ItemRepository itemRepository() {
-        return new JpaItemRepository(em);
+        return new JpaItemRepositoryV1(em);
     }
 
 }
