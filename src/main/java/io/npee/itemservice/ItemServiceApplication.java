@@ -5,6 +5,7 @@ import io.npee.itemservice.config.JdbcTemplateV2Config;
 import io.npee.itemservice.config.JdbcTemplateV3Config;
 import io.npee.itemservice.config.JpaConfig;
 import io.npee.itemservice.config.MyBatisConfig;
+import io.npee.itemservice.config.SpringDataJpaConfig;
 import io.npee.itemservice.repository.ItemRepository;
 import io.npee.itemservice.config.MemoryConfig;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +20,8 @@ import org.springframework.context.annotation.Profile;
 //@Import(JdbcTemplateV2Config.class)
 //@Import(JdbcTemplateV3Config.class)
 //@Import(MyBatisConfig.class)
-@Import(JpaConfig.class)
+//@Import(JpaConfig.class)
+@Import(SpringDataJpaConfig.class)
 @SpringBootApplication(scanBasePackages = "io.npee.itemservice.web")
 public class ItemServiceApplication {
 
