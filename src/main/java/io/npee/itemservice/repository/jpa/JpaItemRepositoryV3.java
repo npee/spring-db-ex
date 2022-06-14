@@ -1,5 +1,8 @@
 package io.npee.itemservice.repository.jpa;
 
+import static io.npee.itemservice.domain.QItem.item;
+
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.npee.itemservice.domain.Item;
 import io.npee.itemservice.repository.ItemRepository;
@@ -8,8 +11,6 @@ import io.npee.itemservice.repository.ItemUpdateDto;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -48,6 +49,19 @@ public class JpaItemRepositoryV3 implements ItemRepository {
 
     @Override
     public List<Item> findAll(ItemSearchCond cond) {
-        return null;
+        String itemName = cond.getItemName();
+        Integer maxPrice = cond.getMaxPrice();
+        BooleanBuilder builder = new BooleanBuilder();
+        if (StringUtils.hasText(itemName)) {
+            builder.and(item.itemName.like("%" + itemName + "%"));
+        }
+        if (maxPrice != null) {
+            builder.and(item.price.loe(maxPrice));
+        }
+        return factory
+            .select(item)
+            .from(item)
+            .where(builder)
+            .fetch();
     }
 }
