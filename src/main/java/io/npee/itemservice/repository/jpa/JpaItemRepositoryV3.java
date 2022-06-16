@@ -80,7 +80,7 @@ public class JpaItemRepositoryV3 implements ItemRepository {
 
     private BooleanExpression likeItemName(String itemName) {
         if (StringUtils.hasText(itemName)) {
-            return item.itemName.like("%" + itemName + "%");
+            return item.itemName.contains(itemName);
         }
         return null;
     }
