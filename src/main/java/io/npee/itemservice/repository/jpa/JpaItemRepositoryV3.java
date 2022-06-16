@@ -3,6 +3,7 @@ package io.npee.itemservice.repository.jpa;
 import static io.npee.itemservice.domain.QItem.item;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.npee.itemservice.domain.Item;
 import io.npee.itemservice.repository.ItemRepository;
@@ -47,8 +48,8 @@ public class JpaItemRepositoryV3 implements ItemRepository {
         return Optional.ofNullable(item);
     }
 
-    @Override
-    public List<Item> findAll(ItemSearchCond cond) {
+
+    public List<Item> findAllOld(ItemSearchCond cond) {
         String itemName = cond.getItemName();
         Integer maxPrice = cond.getMaxPrice();
         BooleanBuilder builder = new BooleanBuilder();
@@ -63,5 +64,31 @@ public class JpaItemRepositoryV3 implements ItemRepository {
             .from(item)
             .where(builder)
             .fetch();
+    }
+
+    @Override
+    public List<Item> findAll(ItemSearchCond cond) {
+        String itemName = cond.getItemName();
+        Integer maxPrice = cond.getMaxPrice();
+        List<Item> result = factory
+            .select(item)
+            .from(item)
+            .where(likeItemName(itemName), maxPrice(maxPrice))
+            .fetch();
+        return result;
+    }
+
+    private BooleanExpression likeItemName(String itemName) {
+        if (StringUtils.hasText(itemName)) {
+            return item.itemName.like("%" + itemName + "%");
+        }
+        return null;
+    }
+
+    private BooleanExpression maxPrice(Integer maxPrice) {
+        if (maxPrice != null) {
+            return item.price.loe(maxPrice);
+        }
+        return null;
     }
 }
